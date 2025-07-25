@@ -1,0 +1,40 @@
+@startuml
+!include C4_Context.puml
+!include C4_Container.puml
+!include C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+LAYOUT_WITH_LEGEND()
+'
+'Person(user, "Customer", "People that need products", $sprite="users")
+'Container(spa, "SPA", "angular", "The main interface that the customer interacts with", $sprite="angular")
+'Container(api, "API", "java", "Handles all business logic", $sprite="java")
+'ContainerDb(db, "Database", "Microsoft SQL", "Holds product, order and invoice information", $sprite="msql_server")
+
+Rel(user, spa, "Uses", "https")
+Rel(spa, api, "Uses", "https")
+Rel(api, db, "Reads/Writes")
+
+Person(user1, "Пользователь", "Клиент, управляющий умным домом", $sprite="users")
+System(warehouse, "Система умного дома")
+System(heat_management, "Устройство управления отоплением")
+System(temperature_sensor, "Датчик температуры")
+Person(technician, "Специалист", "Сотрудник, настраивающий систему", $sprite="users")
+
+Rel(user1, warehouse, "Управляет отоплением")
+Rel(user1, warehouse, "Запрашивает температуру")
+
+Rel(warehouse, heat_management, "Управляет отоплением")
+Rel(warehouse, temperature_sensor, "Получает температуру")
+
+Rel(technician, heat_management, "Устанавливает")
+Rel(technician, temperature_sensor, "Устанавливает")
+Rel(technician, warehouse, "Настраивает")
+
+@enduml
