@@ -1,0 +1,65 @@
+@startuml
+title DeviceRegistrationService - UML Class Diagram (Диаграмма классов)
+
+' Интерфейсы
+interface IDeviceRepository {
+    + Save(device Device) error
+    + FindByID(id string) (Device, error)
+    + Update(device Device) error
+}
+
+interface IEventEmitter {
+    + EmitDeviceRegistered(device Device) error
+    + Connect() error
+}
+
+' Основной класс сервиса
+class DeviceRegistrationService {
+    - deviceRepo IDeviceRepository
+    - eventEmitter IEventEmitter
+    + RegisterDevice(device Device) error
+    + ValidateDevice(device Device) bool
+    + UpdateDeviceStatus(id string, status string) error
+}
+
+' Реализация репозитория
+class PostgreSQLDeviceRepository {
+    - dbConnection *sql.DB
+    + Save(device Device) error
+    + FindByID(id string) (Device, error)
+    + Update(device Device) error
+}
+
+' Реализация событий
+class AMQPEventEmitter {
+    - connection *amqp.Connection
+    - channel *amqp.Channel
+    + EmitDeviceRegistered(device Device) error
+    + Connect() error
+}
+
+' Модель данных
+class Device {
+    + ID string
+    + Name string
+    + Type string
+    + Status string
+    + CreatedAt time.Time
+    + UpdatedAt time.Time
+}
+
+' Связи и зависимости
+DeviceRegistrationService --> IDeviceRepository : использует
+DeviceRegistrationService --> IEventEmitter : использует
+PostgreSQLDeviceRepository ..|> IDeviceRepository : реализует
+AMQPEventEmitter ..|> IEventEmitter : реализует
+DeviceRegistrationService --> Device : использует
+PostgreSQLDeviceRepository --> Device : использует
+AMQPEventEmitter --> Device : использует
+
+' Примечания
+note right of DeviceRegistrationService : Основной сервис для\nрегистрации устройств
+note bottom of Device : Структура данных\nустройства в системе
+note left of PostgreSQLDeviceRepository : Реализация репозитория\nдля PostgreSQL базы данных
+
+@enduml 

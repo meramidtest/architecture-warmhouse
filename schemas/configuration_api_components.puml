@@ -1,0 +1,53 @@
+@startuml
+!include utils/C4_Context.puml
+!include utils/C4_Container.puml
+!include utils/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/material
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include DEVICONS/go.puml
+!include DEVICONS/postgresql.puml
+!include DEVICONS/android.puml
+!include DEVICONS/redis.puml
+!include DEVICONS2/react_original.puml
+!include MATERIAL/router.puml
+!include MATERIAL/message.puml
+!include FONTAWESOME/users.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(cb, "API конфигурации устройств") {
+
+    Boundary(pl_b, "DeviceRegistrationModule") {
+        Component(deviceRegistrationAPIController, "DeviceRegistrationAPIController")
+        Component(deviceRegistrationService, "DeviceRegistrationService")
+        Component(deviceRepository, "DeviceRepository")
+        Component(deviceEventEmitter, "DeviceEventEmitter")
+    }
+
+    Component(amqpClient, "AMQPClient")
+
+    Rel(deviceRegistrationAPIController, deviceRegistrationService, "uses", "")
+    Rel(deviceRegistrationService, deviceRepository, "uses", "")
+    Rel(deviceRegistrationService, deviceEventEmitter, "uses", "")
+    Rel(deviceEventEmitter, amqpClient, "uses", "")
+
+
+    Boundary(config_b, "DeviceConfigurationModule") {
+        Component(deviceConfigAPIController, "DeviceConfigurationAPIController")
+        Component(deviceConfigService, "DeviceConfigurationService")
+        Component(deviceConfigurationRepository, "DeviceConfigurationRepository")
+    }
+
+    Rel(deviceConfigAPIController, deviceConfigService, "uses", "")
+    Rel(deviceConfigService, deviceConfigurationRepository, "uses", "")
+
+}
+
+
+@enduml
