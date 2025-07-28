@@ -51,7 +51,7 @@ Container(spa_application, "SPA приложение", "React, TypeScript", "Rea
 Rel_Down(user, spa_application, "Использует приложение", $techn="HTTPS")
 
 Rel_Down(spa_application, management_api, "Использует", $techn="HTTPS/JSON")
-Rel_Down(spa_application, configuration_api, "Отправляет запрос на добавление/конфигурацию устройства", $techn="HTTPS/JSON")
+Rel_Down(spa_application, configuration_api, "Отправляет запрос на добавление/конфигурацию устройства/получить доступные устройства", $techn="HTTPS/JSON")
 Rel(configuration_api, iot_gateway, "Запрашивает добавление устройства", $techn="HTTPS/JSON")
 
 BiRel(management_api, management_database, "Читает/записывает данные", $techn="SQL")

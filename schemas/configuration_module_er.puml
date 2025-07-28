@@ -1,0 +1,67 @@
+@startuml
+title Configuration Module - ER Diagram (Диаграмма сущностей)
+
+' Дом
+entity "Location\n(Дом)" as location {
+    * location_id : VARCHAR(36) <<PK>>
+    * name : VARCHAR(255)
+}
+
+note right of location : Местоположение утройства (дом)
+
+entity "LocationToUser" as locationToUser {
+    * location_id: VARCHAR(36)
+    * user_id: VARCHAR(36)
+    --
+    * type VARCHAR(50) тип доступа
+}
+
+note right of locationToUser : Пользователи имеющие доступ к дому
+
+location ||--o{ locationToUser : "связано с пользователями/владельцами"
+
+' Сущность устройства
+entity "Device\n(Устройство)" as device {
+    * device_id : VARCHAR(36) <<PK>>
+    * location_id : VARCHAR(36) <<FK>>
+    --
+    * name : VARCHAR(255)
+    * type : VARCHAR(100)
+    * status : VARCHAR(50)
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+}
+
+entity "LocationToDevice" as locationToDevice {
+    * device_id: VARCHAR(36)
+    * user_id: VARCHAR(36)
+    --
+    * type VARCHAR(50) тип доступа
+}
+
+note right of locationToDevice : Пользователи имеющие доступ к устройству
+
+device ||--o{ locationToDevice : "связано с пользователями/владельцами"
+
+' Сущность конфигурации устройства
+entity "DeviceConfiguration\n(Конфигурация устройства)" as config {
+    * config_id : VARCHAR(36) <<PK>>
+    * device_id : VARCHAR(36) <<FK>>
+    --
+    * config_name : VARCHAR(255)
+    * config_value : TEXT
+    * config_type : VARCHAR(50)
+    * is_active : BOOLEAN
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+}
+
+' Связи между сущностями
+device ||--o{ config : "имеет конфигурации"
+location ||--o{ device : "имеет устройства"
+
+note right of device : Основная сущность\nустройства в системе
+
+note left of config : Конфигурационные\nпараметры устройства
+
+@enduml 
