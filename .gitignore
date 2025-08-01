@@ -192,3 +192,7 @@ build/
 
 tmp/
 task-*
+/apps/.vs
+/apps/temperature-api/.vs
+/apps/temperature-api/bin/Debug/net8.0
+/apps/temperature-api/obj
