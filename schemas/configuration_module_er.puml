@@ -9,17 +9,6 @@ entity "Location\n(Дом)" as location {
 
 note right of location : Местоположение утройства (дом)
 
-entity "LocationToUser" as locationToUser {
-    * location_id: VARCHAR(36)
-    * user_id: VARCHAR(36)
-    --
-    * type VARCHAR(50) тип доступа
-}
-
-note right of locationToUser : Пользователи имеющие доступ к дому
-
-location ||--o{ locationToUser : "связано с пользователями/владельцами"
-
 ' Сущность устройства
 entity "Device\n(Устройство)" as device {
     * device_id : VARCHAR(36) <<PK>>

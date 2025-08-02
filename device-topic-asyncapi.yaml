@@ -1,0 +1,109 @@
+asyncapi: 3.0.0
+info:
+  title: Smart Home Device Topic API
+  version: 1.0.0
+  description: Minimal AsyncAPI specification for Device topic in smart home system
+
+servers:
+  rabbitmq:
+    host: localhost:5672
+    protocol: amqp
+    description: RabbitMQ message broker
+
+channels:
+  devices:
+    address: devices
+    messages:
+      deviceRegistered:
+        $ref: '#/components/messages/DeviceRegistered'
+      deviceUpdated:
+        $ref: '#/components/messages/DeviceUpdated'
+
+operations:
+  publishDeviceEvent:
+    action: send
+    channel:
+      $ref: '#/channels/devices'
+    summary: Configuration API publishes device events
+    messages:
+      - $ref: '#/channels/devices/messages/deviceRegistered'
+      - $ref: '#/channels/devices/messages/deviceUpdated'
+
+  subscribeDeviceEvent:
+    action: receive
+    channel:
+      $ref: '#/channels/devices'
+    summary: Management worker subscribes to device events
+    messages:
+      - $ref: '#/channels/devices/messages/deviceRegistered'
+      - $ref: '#/channels/devices/messages/deviceUpdated'
+
+components:
+  messages:
+    DeviceRegistered:
+      name: deviceRegistered
+      title: Device Registered
+      payload:
+        $ref: '#/components/schemas/DeviceEvent'
+    
+    DeviceUpdated:
+      name: deviceUpdated
+      title: Device Updated
+      payload:
+        $ref: '#/components/schemas/DeviceEvent'
+
+  schemas:
+    DeviceEvent:
+      type: object
+      required:
+        - device_id
+        - event_type
+        - timestamp
+        - device_data
+      properties:
+        device_id:
+          type: string
+          format: uuid
+          description: Unique device identifier
+        event_type:
+          type: string
+          enum: [registered, updated]
+          description: Type of device event
+        timestamp:
+          type: string
+          format: date-time
+          description: Event timestamp
+        device_data:
+          $ref: '#/components/schemas/Device'
+
+    Device:
+      type: object
+      required:
+        - device_id
+        - name
+        - type
+        - status
+      properties:
+        device_id:
+          type: string
+          format: uuid
+        location_id:
+          type: string
+          format: uuid
+        serial_id:
+          type: string
+        name:
+          type: string
+          maxLength: 255
+        type:
+          type: string
+          maxLength: 100
+        status:
+          type: string
+          maxLength: 50
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time 

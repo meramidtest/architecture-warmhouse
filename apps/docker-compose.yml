@@ -4,10 +4,70 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: smarthome-postgres
-  ## тут нужно добавить настройки
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./smart_home/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+    command: postgres -c listen_addresses='*'
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    networks:
+      - smarthome-network
+
+  postgres_temperature:
+    image: postgres:16-alpine
+    container_name: smarthome-postgres-temperature
+    volumes:
+      - postgres_temperature_data:/var/lib/postgresql/data
+
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+    command: postgres -c listen_addresses='*'
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    networks:
+      - smarthome-network
 
   temperature-api:
-  ## тут нужно добавить приложение
+    build:
+      context: ./temperature_api
+      dockerfile: Dockerfile
+    container_name: smarthome-temperature-api
+    depends_on:
+      postgres_temperature:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres_temperature:5432/postgres
+    restart: unless-stopped
+    networks:
+      - smarthome-network
+    ports:
+      - "5001:5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5000/health')"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 5s
 
   app:
     build:
@@ -21,7 +81,7 @@ services:
         condition: service_started
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/smarthome
-      - TEMPERATURE_API_URL=http://temperature-api:8081
+      - TEMPERATURE_API_URL=http://temperature-api:5000
     ports:
       - "8080:8080"
     restart: unless-stopped
@@ -30,6 +90,7 @@ services:
 
 volumes:
   postgres_data:
+  postgres_temperature_data:
 
 networks:
   smarthome-network:

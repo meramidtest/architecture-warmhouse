@@ -5,6 +5,7 @@ title Management Module - ER Diagram (Диаграмма сущностей)
 entity "Device\n(Устройство)" as device {
     * device_id : VARCHAR(36) <<PK>>
     --
+    * serial_id : VARCHAR(255)
     * name : VARCHAR(255)
     * type : VARCHAR(100)
     * created_at : TIMESTAMP

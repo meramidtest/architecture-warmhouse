@@ -1,0 +1,479 @@
+openapi: 3.0.3
+info:
+  title: Smart Home Management API
+  description: |
+    API для управления устройствами умного дома.
+    Предоставляет функциональность для управления программируемой логикой, получения телеметрии и отправки команд устройствам.
+  version: 1.0.0
+  contact:
+    name: Smart Home Team
+    email: support@smarthome.com
+
+servers:
+  - url: http://localhost:8081/api/v1
+    description: Development server
+
+tags:
+  - name: programmable-logic
+    description: Управление программируемой логикой устройств
+  - name: telemetry
+    description: Получение и управление телеметрией устройств
+  - name: commands
+    description: Отправка команд устройствам
+
+paths:
+  # Programmable Logic Endpoints
+  /devices/{device_id}/logic:
+    get:
+      tags:
+        - programmable-logic
+      summary: Получить программируемую логику устройства
+      description: Возвращает все программируемые логики для указанного устройства
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          description: Уникальный идентификатор устройства
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Программируемые логики получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeviceCustomLogic'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - programmable-logic
+      summary: Добавить программируемую логику
+      description: Создает новую программируемую логику для устройства
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          description: Уникальный идентификатор устройства
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLogicRequest'
+      responses:
+        '201':
+          description: Программируемая логика создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceCustomLogic'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /devices/{device_id}/logic/{logic_id}:
+    put:
+      tags:
+        - programmable-logic
+      summary: Обновить программируемую логику
+      description: Обновляет существующую программируемую логику устройства
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          description: Уникальный идентификатор устройства
+          schema:
+            type: string
+            format: uuid
+        - name: logic_id
+          in: path
+          required: true
+          description: Уникальный идентификатор программируемой логики
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLogicRequest'
+      responses:
+        '200':
+          description: Программируемая логика обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceCustomLogic'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - programmable-logic
+      summary: Удалить программируемую логику
+      description: Удаляет программируемую логику устройства
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          description: Уникальный идентификатор устройства
+          schema:
+            type: string
+            format: uuid
+        - name: logic_id
+          in: path
+          required: true
+          description: Уникальный идентификатор программируемой логики
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Программируемая логика удалена
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  # Telemetry Endpoints
+  /devices/{device_id}/telemetry:
+    get:
+      tags:
+        - telemetry
+      summary: Получить телеметрию устройства
+      description: Возвращает последние данные телеметрии для устройства
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          description: Уникальный идентификатор устройства
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          description: Количество записей
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Телеметрия получена
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Telemetry'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  # Commands Endpoints
+  /devices/{device_id}/commands:
+    post:
+      tags:
+        - commands
+      summary: Отправить команду устройству
+      description: Отправляет команду управления устройству через IoT Gateway
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          description: Уникальный идентификатор устройства
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceCommand'
+      responses:
+        '202':
+          description: Команда принята к выполнению
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  command_id:
+                    type: string
+                    format: uuid
+                    description: Идентификатор команды
+                  status:
+                    type: string
+                    enum: [accepted, processing, completed, failed]
+                    description: Статус выполнения команды
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Device:
+      type: object
+      required:
+        - device_id
+        - serial_id
+        - name
+        - type
+        - created_at
+        - updated_at
+      properties:
+        device_id:
+          type: string
+          format: uuid
+          description: Уникальный идентификатор устройства
+        serial_id:
+          type: string
+          maxLength: 255
+          description: Серийный номер устройства
+          example: "SN123456789"
+        name:
+          type: string
+          maxLength: 255
+          description: Название устройства
+          example: "Термостат в гостиной"
+        type:
+          type: string
+          maxLength: 100
+          description: Тип устройства
+          example: "thermostat"
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания записи
+        updated_at:
+          type: string
+          format: date-time
+          description: Время последнего обновления
+
+    DeviceCustomLogic:
+      type: object
+      required:
+        - logic_config_id
+        - device_id
+        - name
+        - value
+        - type
+        - is_active
+        - created_at
+        - updated_at
+      properties:
+        logic_config_id:
+          type: string
+          format: uuid
+          description: Уникальный идентификатор программируемой логики
+        device_id:
+          type: string
+          format: uuid
+          description: Идентификатор устройства
+        name:
+          type: string
+          maxLength: 255
+          description: Название программируемой логики
+          example: "Автоматическое регулирование температуры"
+        value:
+          type: object
+          description: JSON с логикой, заданной пользователем
+          additionalProperties: true
+          example:
+            trigger: "temperature < 18"
+            action: "set_temperature(22)"
+        type:
+          type: string
+          maxLength: 50
+          description: Тип программируемой логики
+          example: "temperature_control"
+        is_active:
+          type: boolean
+          description: Активна ли программируемая логика
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания логики
+        updated_at:
+          type: string
+          format: date-time
+          description: Время последнего обновления логики
+
+    CreateLogicRequest:
+      type: object
+      required:
+        - name
+        - value
+        - type
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Название программируемой логики
+          example: "Автоматическое регулирование температуры"
+        value:
+          type: object
+          description: JSON с логикой, заданной пользователем
+          additionalProperties: true
+        type:
+          type: string
+          maxLength: 50
+          description: Тип программируемой логики
+          example: "temperature_control"
+        is_active:
+          type: boolean
+          description: Активна ли программируемая логика
+          default: true
+
+    UpdateLogicRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Новое название программируемой логики
+        value:
+          type: object
+          description: Новая логика в формате JSON
+          additionalProperties: true
+        type:
+          type: string
+          maxLength: 50
+          description: Новый тип программируемой логики
+        is_active:
+          type: boolean
+          description: Активность программируемой логики
+
+    Telemetry:
+      type: object
+      required:
+        - telemetry_id
+        - device_id
+        - value
+        - type
+        - created_at
+      properties:
+        telemetry_id:
+          type: string
+          format: uuid
+          description: Уникальный идентификатор записи телеметрии
+        device_id:
+          type: string
+          format: uuid
+          description: Идентификатор устройства
+        value:
+          type: object
+          description: Значения телеметрии в формате JSON
+          additionalProperties: true
+          example:
+            temperature: 22.5
+        type:
+          type: string
+          maxLength: 50
+          description: Тип телеметрии
+          example: "sensor_data"
+        created_at:
+          type: string
+          format: date-time
+          description: Время создания записи
+
+    DeviceCommand:
+      type: object
+      required:
+        - command_type
+        - parameters
+      properties:
+        command_type:
+          type: string
+          maxLength: 100
+          description: Тип команды
+          example: "set_temperature"
+        parameters:
+          type: object
+          description: Параметры команды
+          additionalProperties: true
+          example:
+            temperature: 23
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Код ошибки
+          example: "DEVICE_NOT_FOUND"
+        message:
+          type: string
+          description: Описание ошибки
+          example: "Устройство с указанным ID не найдено"
+        details:
+          type: object
+          description: Дополнительные детали ошибки
+
+  responses:
+    BadRequest:
+      description: Неверный запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "INVALID_REQUEST"
+            message: "Переданы некорректные параметры"
+
+    NotFound:
+      description: Ресурс не найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "NOT_FOUND"
+            message: "Запрашиваемый ресурс не найден"
+
+    InternalServerError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "INTERNAL_ERROR"
+            message: "Произошла внутренняя ошибка сервера"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: [] 
