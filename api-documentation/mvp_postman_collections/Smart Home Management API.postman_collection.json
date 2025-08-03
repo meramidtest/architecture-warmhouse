@@ -1577,7 +1577,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+							"raw": "{{baseUrl}}/devices",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1790,7 +1790,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8081/api/v1"
+			"value": "http://localhost:8082/api/v1"
 		}
 	]
 }

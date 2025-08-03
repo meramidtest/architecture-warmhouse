@@ -1,1 +1,30 @@
+# Database files
+mvp/iotgateway/iot_gateway.db
+
+# IDE files
+.idea/
+.vscode/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
