@@ -29,6 +29,8 @@ paths:
         - devices
       summary: Получить список устройств
       description: Возвращает список всех зарегистрированных устройств
+      parameters:
+        - $ref: '#/components/parameters/UserIdHeader'
       responses:
         '200':
           description: Список устройств успешно получен
@@ -46,6 +48,8 @@ paths:
         - devices
       summary: Зарегистрировать новое устройство
       description: Регистрирует новое устройство в системе
+      parameters:
+        - $ref: '#/components/parameters/UserIdHeader'
       requestBody:
         required: true
         content:
@@ -79,6 +83,7 @@ paths:
           schema:
             type: string
             format: uuid
+        - $ref: '#/components/parameters/UserIdHeader'
       responses:
         '200':
           description: Конфигурации получены
@@ -106,6 +111,7 @@ paths:
           schema:
             type: string
             format: uuid
+        - $ref: '#/components/parameters/UserIdHeader'
       requestBody:
         required: true
         content:
@@ -133,6 +139,8 @@ paths:
         - locations
       summary: Получить список локаций
       description: Возвращает список всех локаций (домов)
+      parameters:
+        - $ref: '#/components/parameters/UserIdHeader'
       responses:
         '200':
           description: Список локаций получен
@@ -150,6 +158,8 @@ paths:
         - locations
       summary: Создать новую локацию
       description: Создает новую локацию (дом)
+      parameters:
+        - $ref: '#/components/parameters/UserIdHeader'
       requestBody:
         required: true
         content:
@@ -169,6 +179,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
 components:
+  parameters:
+    UserIdHeader:
+      name: User-ID
+      in: header
+      required: true
+      description: Уникальный идентификатор пользователя
+      schema:
+        type: string
+        format: uuid
+      example: "123e4567-e89b-12d3-a456-426614174000"
+
   schemas:
     Device:
       type: object

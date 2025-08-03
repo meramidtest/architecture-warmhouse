@@ -1,0 +1,218 @@
+asyncapi: 3.0.0
+info:
+  title: Smart Home Telemetry Topic API
+  version: 1.0.0
+  description: AsyncAPI specification for Telemetry topic in smart home system for real-time device data streaming
+
+servers:
+  rabbitmq:
+    host: localhost:5672
+    protocol: amqp
+    description: RabbitMQ message broker
+  redis:
+    host: localhost:6379
+    protocol: redis
+    description: Redis cache for telemetry data
+
+channels:
+  telemetry:
+    address: telemetry
+    messages:
+      telemetryReceived:
+        $ref: '#/components/messages/TelemetryReceived'
+      telemetryBatch:
+        $ref: '#/components/messages/TelemetryBatch'
+
+operations:
+  publishTelemetryData:
+    action: send
+    channel:
+      $ref: '#/channels/telemetry'
+    summary: IoT Gateway publishes real-time telemetry data
+    description: IoT devices and gateway publish telemetry data including sensor readings, status updates, and device metrics
+    messages:
+      - $ref: '#/channels/telemetry/messages/telemetryReceived'
+      - $ref: '#/channels/telemetry/messages/telemetryBatch'
+
+  subscribeTelemetryData:
+    action: receive
+    channel:
+      $ref: '#/channels/telemetry'
+    summary: Management services subscribe to telemetry data
+    description: Management worker and analytics services consume telemetry data for storage, caching, and real-time monitoring
+    messages:
+      - $ref: '#/channels/telemetry/messages/telemetryReceived'
+      - $ref: '#/channels/telemetry/messages/telemetryBatch'
+
+components:
+  messages:
+    TelemetryReceived:
+      name: telemetryReceived
+      title: Telemetry Data Received
+      summary: Single telemetry data point from an IoT device
+      payload:
+        $ref: '#/components/schemas/TelemetryEvent'
+      examples:
+        - name: TemperatureSensorReading
+          summary: Temperature sensor telemetry
+          payload:
+            telemetry_id: "123e4567-e89b-12d3-a456-426614174000"
+            device_id: "device-001"
+            timestamp: "2024-01-15T10:30:00Z"
+            type: "sensor_reading"
+            value:
+              temperature: 23.5
+              humidity: 45.2
+              unit: "celsius"
+        - name: DeviceStatusUpdate
+          summary: Device status telemetry
+          payload:
+            telemetry_id: "123e4567-e89b-12d3-a456-426614174001"
+            device_id: "device-002"
+            timestamp: "2024-01-15T10:31:00Z"
+            type: "status_update"
+            value:
+              status: "online"
+              battery_level: 87
+              signal_strength: -45
+
+    TelemetryBatch:
+      name: telemetryBatch
+      title: Batch Telemetry Data
+      summary: Multiple telemetry data points sent together
+      payload:
+        $ref: '#/components/schemas/TelemetryBatchEvent'
+      examples:
+        - name: SensorReadingsBatch
+          summary: Multiple sensor readings batch
+          payload:
+            batch_id: "batch-001"
+            device_id: "device-001"
+            timestamp: "2024-01-15T10:30:00Z"
+            count: 3
+            telemetry_data:
+              - telemetry_id: "123e4567-e89b-12d3-a456-426614174002"
+                type: "sensor_reading"
+                timestamp: "2024-01-15T10:30:00Z"
+                value:
+                  temperature: 23.5
+                  humidity: 45.2
+              - telemetry_id: "123e4567-e89b-12d3-a456-426614174003"
+                type: "sensor_reading"
+                timestamp: "2024-01-15T10:30:30Z"
+                value:
+                  temperature: 23.7
+                  humidity: 45.0
+              - telemetry_id: "123e4567-e89b-12d3-a456-426614174004"
+                type: "sensor_reading"
+                timestamp: "2024-01-15T10:31:00Z"
+                value:
+                  temperature: 23.6
+                  humidity: 45.1
+
+  schemas:
+    TelemetryEvent:
+      type: object
+      required:
+        - telemetry_id
+        - device_id
+        - timestamp
+        - type
+        - value
+      properties:
+        telemetry_id:
+          type: string
+          format: uuid
+          description: Unique telemetry entry identifier
+        device_id:
+          type: string
+          format: uuid
+          description: Device that generated the telemetry data
+        timestamp:
+          type: string
+          format: date-time
+          description: When the telemetry data was captured
+        type:
+          type: string
+          enum: 
+            - sensor_reading
+            - status_update
+            - device_metrics
+            - alarm
+            - heartbeat
+          description: Type of telemetry data
+        value:
+          type: object
+          description: Dynamic telemetry data payload (sensor readings, status info, metrics)
+          additionalProperties: true
+          examples:
+            - temperature: 25.3
+              humidity: 60.1
+              pressure: 1013.25
+            - status: "online"
+              battery_level: 95
+              signal_strength: -40
+            - cpu_usage: 45.2
+              memory_usage: 67.8
+              uptime: 86400
+
+    TelemetryBatchEvent:
+      type: object
+      required:
+        - batch_id
+        - device_id
+        - timestamp
+        - count
+        - telemetry_data
+      properties:
+        batch_id:
+          type: string
+          format: uuid
+          description: Unique batch identifier
+        device_id:
+          type: string
+          format: uuid
+          description: Device that generated the batch telemetry data
+        timestamp:
+          type: string
+          format: date-time
+          description: When the batch was created
+        count:
+          type: integer
+          minimum: 1
+          description: Number of telemetry entries in this batch
+        telemetry_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelemetryDataPoint'
+          description: Array of telemetry data points
+
+    TelemetryDataPoint:
+      type: object
+      required:
+        - telemetry_id
+        - type
+        - timestamp
+        - value
+      properties:
+        telemetry_id:
+          type: string
+          format: uuid
+          description: Unique telemetry entry identifier
+        type:
+          type: string
+          enum: 
+            - sensor_reading
+            - status_update
+            - device_metrics
+            - alarm
+            - heartbeat
+          description: Type of telemetry data
+        timestamp:
+          type: string
+          format: date-time
+          description: When the telemetry data was captured
+        value:
+          type: object
+          description: Dynamic telemetry data payload
+          additionalProperties: true 

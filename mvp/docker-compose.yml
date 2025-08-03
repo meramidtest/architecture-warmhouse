@@ -1,0 +1,177 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: device-config-postgres
+    environment:
+      POSTGRES_DB: device_config
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - iot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d device_config"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: device-config-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - iot-network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: device-config-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - iot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  device-configuration:
+    build:
+      context: ./device-configuration
+      dockerfile: Dockerfile
+    container_name: device-configuration
+    ports:
+      - "8081:8081"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: device_config
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      IOT_GATEWAY_URL: http://iot-gateway:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      iot-gateway:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - iot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8081/health')"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+
+  device-management:
+    build:
+      context: ./device-management/api
+      dockerfile: Dockerfile
+    container_name: device-management-api
+    ports:
+      - "8082:8081"  # Map host port 8082 to container port 8081
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/management_db
+      IOT_GATEWAY_URL: http://iot-gateway:8080
+      REDIS_URL: redis://redis:6379
+      FLASK_ENV: production
+      DEBUG: "false"
+      SECRET_KEY: production-secret-key-change-me
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      iot-gateway:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - iot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8081/health')"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 15s
+
+  device-management-worker:
+    build:
+      context: ./device-management/worker
+      dockerfile: Dockerfile
+    container_name: device-management-worker
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/management_db
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      REDIS_URL: redis://redis:6379
+      IOT_GATEWAY_URL: http://iot-gateway:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      iot-gateway:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - iot-network
+
+  iot-gateway:
+    build:
+      context: ./iotgateway
+      dockerfile: Dockerfile
+    container_name: iot-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASSWORD: guest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - iot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8080/health')"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 5s
+    volumes:
+      - ./iotgateway/iot_gateway.db:/app/iot_gateway.db
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  redis_data:
+
+networks:
+  iot-network:
+    driver: bridge 

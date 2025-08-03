@@ -23,6 +23,13 @@ LAYOUT_WITH_LEGEND()
 
 Person(user, "Пользователь", "Клиент, управляющий умным домом", $sprite="users")
 
+System_Boundary(b_app, "Depcreated монолит") {
+    Container(app_api, "API монолита", "Go, Gin", "", $sprite="go")
+    ContainerDb(app_database, "БД", "PostgreSQL", "Хранит устройства и программируемую логику", $sprite="postgresql")
+
+    Container(temperature_api, "API температуры", "Python, Flask", "", $sprite="python")
+}
+
 System_Boundary(b_commands, "Управление устройствами") {
     Container(management_api, "API управления устройствами", "Go, Gin", "Формирует команды управления, получает информацию о телеметрии, сохраняет и исполняет программиремую логику", $sprite="go")
     Container(management_worker, "Воркер управления устройств", "Go", "Добавляет новые устройства, обновляет телеметрию, инициирует выполнения пользовательских программ", $sprite="go")
@@ -69,5 +76,10 @@ Rel_Down(management_api, iot_gateway, "Отправляет запросы", $te
 Rel_Down(management_worker, iot_gateway, "Отправляет запросы", $techn="HTTPS/JSON")
 
 Rel(management_worker, topic_telemetry, "Подписывается", $techn="AMQP")
+
+Rel_Right(spa_application, app_api, "Использует", $techn="HTTPS/JSON")
+BiRel(app_api, app_database, "Читает/записывает данные", $techn="SQL")
+Rel_Right(app_api, temperature_api, "Использует", $techn="HTTPS/JSON")
+
 
 @enduml

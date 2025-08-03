@@ -1,0 +1,1796 @@
+{
+	"info": {
+		"_postman_id": "e07e48fc-f1f9-4577-a0de-7f9667208b29",
+		"name": "Smart Home Management API",
+		"description": "API для управления устройствами умного дома.\nПредоставляет функциональность для управления программируемой логикой, получения телеметрии и отправки команд устройствам.\n\n\nContact Support:\n Name: Smart Home Team\n Email: support@smarthome.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8834670"
+	},
+	"item": [
+		{
+			"name": "devices",
+			"item": [
+				{
+					"name": "{device_id}",
+					"item": [
+						{
+							"name": "logic",
+							"item": [
+								{
+									"name": "{logic_id}",
+									"item": [
+										{
+											"name": "Обновить программируемую логику",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"name\": \"string\",\n  \"value\": {\n    \"key_0\": true,\n    \"key_1\": false\n  },\n  \"type\": \"string\",\n  \"is_active\": true\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic",
+														":logic_id"
+													],
+													"variable": [
+														{
+															"key": "device_id",
+															"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+															"description": "(Required) Уникальный идентификатор устройства"
+														},
+														{
+															"key": "logic_id",
+															"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+															"description": "(Required) Уникальный идентификатор программируемой логики"
+														}
+													]
+												},
+												"description": "Обновляет существующую программируемую логику устройства"
+											},
+											"response": [
+												{
+													"name": "Программируемая логика обновлена",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"name\": \"string\",\n  \"value\": {\n    \"key_0\": true,\n    \"key_1\": false\n  },\n  \"type\": \"string\",\n  \"is_active\": true\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"logic_config_id\": \"7f7e586d-fbd2-538f-7d7f-9a35cce49bbd\",\n  \"device_id\": \"urn:uuid:0f5012ae-30f6-6682-3d1b-9568bcef402d\",\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"trigger\": \"temperature < 18\",\n    \"action\": \"set_temperature(22)\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true,\n  \"created_at\": \"1960-11-28T07:19:46.940Z\",\n  \"updated_at\": \"1982-03-15T00:04:43.036Z\"\n}"
+												},
+												{
+													"name": "Неверный запрос",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"name\": \"string\",\n  \"value\": {\n    \"key_0\": true,\n    \"key_1\": false\n  },\n  \"type\": \"string\",\n  \"is_active\": true\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"error\": \"INVALID_REQUEST\",\n  \"message\": \"Переданы некорректные параметры\"\n}"
+												},
+												{
+													"name": "Ресурс не найден",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"name\": \"string\",\n  \"value\": {\n    \"key_0\": true,\n    \"key_1\": false\n  },\n  \"type\": \"string\",\n  \"is_active\": true\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+												},
+												{
+													"name": "Внутренняя ошибка сервера",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"name\": \"string\",\n  \"value\": {\n    \"key_0\": true,\n    \"key_1\": false\n  },\n  \"type\": \"string\",\n  \"is_active\": true\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "Internal Server Error",
+													"code": 500,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+												}
+											]
+										},
+										{
+											"name": "Удалить программируемую логику",
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic",
+														":logic_id"
+													],
+													"variable": [
+														{
+															"key": "device_id",
+															"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+															"description": "(Required) Уникальный идентификатор устройства"
+														},
+														{
+															"key": "logic_id",
+															"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+															"description": "(Required) Уникальный идентификатор программируемой логики"
+														}
+													]
+												},
+												"description": "Удаляет программируемую логику устройства"
+											},
+											"response": [
+												{
+													"name": "Программируемая логика удалена",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "No Content",
+													"code": 204,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Ресурс не найден",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+												},
+												{
+													"name": "Внутренняя ошибка сервера",
+													"originalRequest": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "User-ID",
+																"value": "123e4567-e89b-12d3-a456-426614174000",
+																"description": "(Required) Уникальный идентификатор пользователя"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Bearer <token>",
+																"description": "Added as a part of security scheme: bearer"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/devices/:device_id/logic/:logic_id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"devices",
+																":device_id",
+																"logic",
+																":logic_id"
+															],
+															"variable": [
+																{
+																	"key": "device_id"
+																},
+																{
+																	"key": "logic_id"
+																}
+															]
+														}
+													},
+													"status": "Internal Server Error",
+													"code": 500,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Получить программируемую логику устройства",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "User-ID",
+												"value": "123e4567-e89b-12d3-a456-426614174000",
+												"description": "(Required) Уникальный идентификатор пользователя"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/devices/:device_id/logic",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"devices",
+												":device_id",
+												"logic"
+											],
+											"variable": [
+												{
+													"key": "device_id",
+													"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+													"description": "(Required) Уникальный идентификатор устройства"
+												}
+											]
+										},
+										"description": "Возвращает все программируемые логики для указанного устройства"
+									},
+									"response": [
+										{
+											"name": "Программируемые логики получены",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"logic_config_id\": \"urn:uuid:726d3e5d-55d3-0f52-64e9-f64a508b8178\",\n    \"device_id\": \"urn:uuid:6812e230-0895-5a54-2459-a9a29a50e098\",\n    \"name\": \"Автоматическое регулирование температуры\",\n    \"value\": {\n      \"trigger\": \"temperature < 18\",\n      \"action\": \"set_temperature(22)\"\n    },\n    \"type\": \"temperature_control\",\n    \"is_active\": false,\n    \"created_at\": \"2019-12-31T01:11:38.450Z\",\n    \"updated_at\": \"2020-12-16T15:48:57.254Z\"\n  },\n  {\n    \"logic_config_id\": \"f09d784d-d0e9-b3cd-da92-d627ae7460c9\",\n    \"device_id\": \"27e21393-6570-1f61-9f7b-1115679281fb\",\n    \"name\": \"Автоматическое регулирование температуры\",\n    \"value\": {\n      \"trigger\": \"temperature < 18\",\n      \"action\": \"set_temperature(22)\"\n    },\n    \"type\": \"temperature_control\",\n    \"is_active\": true,\n    \"created_at\": \"1954-11-04T23:29:14.649Z\",\n    \"updated_at\": \"1961-04-18T21:47:15.334Z\"\n  }\n]"
+										},
+										{
+											"name": "Ресурс не найден",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+										},
+										{
+											"name": "Внутренняя ошибка сервера",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Добавить программируемую логику",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "User-ID",
+												"value": "123e4567-e89b-12d3-a456-426614174000",
+												"description": "(Required) Уникальный идентификатор пользователя"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"key_0\": \"string\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/devices/:device_id/logic",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"devices",
+												":device_id",
+												"logic"
+											],
+											"variable": [
+												{
+													"key": "device_id",
+													"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+													"description": "(Required) Уникальный идентификатор устройства"
+												}
+											]
+										},
+										"description": "Создает новую программируемую логику для устройства"
+									},
+									"response": [
+										{
+											"name": "Программируемая логика создана",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"key_0\": \"string\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"logic_config_id\": \"7f7e586d-fbd2-538f-7d7f-9a35cce49bbd\",\n  \"device_id\": \"urn:uuid:0f5012ae-30f6-6682-3d1b-9568bcef402d\",\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"trigger\": \"temperature < 18\",\n    \"action\": \"set_temperature(22)\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true,\n  \"created_at\": \"1960-11-28T07:19:46.940Z\",\n  \"updated_at\": \"1982-03-15T00:04:43.036Z\"\n}"
+										},
+										{
+											"name": "Неверный запрос",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"key_0\": \"string\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"INVALID_REQUEST\",\n  \"message\": \"Переданы некорректные параметры\"\n}"
+										},
+										{
+											"name": "Ресурс не найден",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"key_0\": \"string\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+										},
+										{
+											"name": "Внутренняя ошибка сервера",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"name\": \"Автоматическое регулирование температуры\",\n  \"value\": {\n    \"key_0\": \"string\"\n  },\n  \"type\": \"temperature_control\",\n  \"is_active\": true\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/logic",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"logic"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "telemetry",
+							"item": [
+								{
+									"name": "Получить телеметрию устройства",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "User-ID",
+												"value": "123e4567-e89b-12d3-a456-426614174000",
+												"description": "(Required) Уникальный идентификатор пользователя"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"devices",
+												":device_id",
+												"telemetry"
+											],
+											"query": [
+												{
+													"key": "limit",
+													"value": "20",
+													"description": "Количество записей"
+												}
+											],
+											"variable": [
+												{
+													"key": "device_id",
+													"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+													"description": "(Required) Уникальный идентификатор устройства"
+												}
+											]
+										},
+										"description": "Возвращает последние данные телеметрии для устройства"
+									},
+									"response": [
+										{
+											"name": "Телеметрия получена",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"telemetry"
+													],
+													"query": [
+														{
+															"key": "limit",
+															"value": "20",
+															"description": "Количество записей"
+														}
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"telemetry_id\": \"a05932ac-04ea-458c-0e3c-a19641e2e035\",\n    \"device_id\": \"urn:uuid:d869d41c-2c78-2351-9198-29a0d1eead3d\",\n    \"value\": {\n      \"temperature\": 22.5\n    },\n    \"type\": \"sensor_data\",\n    \"created_at\": \"1984-03-13T05:11:41.500Z\"\n  },\n  {\n    \"telemetry_id\": \"urn:uuid:e090b61a-18f4-1b22-9b5b-40601e242ec5\",\n    \"device_id\": \"urn:uuid:d95e03bc-7b4b-1315-4859-d269b04e80b2\",\n    \"value\": {\n      \"temperature\": 22.5\n    },\n    \"type\": \"sensor_data\",\n    \"created_at\": \"1995-11-17T11:48:42.848Z\"\n  }\n]"
+										},
+										{
+											"name": "Ресурс не найден",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"telemetry"
+													],
+													"query": [
+														{
+															"key": "limit",
+															"value": "20",
+															"description": "Количество записей"
+														}
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+										},
+										{
+											"name": "Внутренняя ошибка сервера",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"telemetry"
+													],
+													"query": [
+														{
+															"key": "limit",
+															"value": "20",
+															"description": "Количество записей"
+														}
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "commands",
+							"item": [
+								{
+									"name": "Отправить команду устройству",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "User-ID",
+												"value": "123e4567-e89b-12d3-a456-426614174000",
+												"description": "(Required) Уникальный идентификатор пользователя"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"command_type\": \"set_temperature\",\n  \"parameters\": {\n    \"temperature\": 23\n  }\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/devices/:device_id/commands",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"devices",
+												":device_id",
+												"commands"
+											],
+											"variable": [
+												{
+													"key": "device_id",
+													"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+													"description": "(Required) Уникальный идентификатор устройства"
+												}
+											]
+										},
+										"description": "Отправляет команду управления устройству через IoT Gateway"
+									},
+									"response": [
+										{
+											"name": "Команда принята к выполнению",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"command_type\": \"set_temperature\",\n  \"parameters\": {\n    \"temperature\": 23\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/commands",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"commands"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Accepted",
+											"code": 202,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"command_id\": \"1a8bf5de-cce3-ca4f-7aa6-f93ef0688f74\",\n  \"status\": \"processing\"\n}"
+										},
+										{
+											"name": "Неверный запрос",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"command_type\": \"set_temperature\",\n  \"parameters\": {\n    \"temperature\": 23\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/commands",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"commands"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"INVALID_REQUEST\",\n  \"message\": \"Переданы некорректные параметры\"\n}"
+										},
+										{
+											"name": "Ресурс не найден",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"command_type\": \"set_temperature\",\n  \"parameters\": {\n    \"temperature\": 23\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/commands",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"commands"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+										},
+										{
+											"name": "Внутренняя ошибка сервера",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "User-ID",
+														"value": "123e4567-e89b-12d3-a456-426614174000",
+														"description": "(Required) Уникальный идентификатор пользователя"
+													},
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer <token>",
+														"description": "Added as a part of security scheme: bearer"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"command_type\": \"set_temperature\",\n  \"parameters\": {\n    \"temperature\": 23\n  }\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/devices/:device_id/commands",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"devices",
+														":device_id",
+														"commands"
+													],
+													"variable": [
+														{
+															"key": "device_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Получить устройства",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "User-ID",
+								"value": "123e4567-e89b-12d3-a456-426614174000",
+								"description": "(Required) Уникальный идентификатор пользователя"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"devices",
+								":device_id",
+								"telemetry"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Количество записей"
+								}
+							],
+							"variable": [
+								{
+									"key": "device_id",
+									"value": "431aeee1-7afe-2438-e7b4-428359bbaee4",
+									"description": "(Required) Уникальный идентификатор устройства"
+								}
+							]
+						},
+						"description": "Возвращает последние данные телеметрии для устройства"
+					},
+					"response": [
+						{
+							"name": "Телеметрия получена",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "User-ID",
+										"value": "123e4567-e89b-12d3-a456-426614174000",
+										"description": "(Required) Уникальный идентификатор пользователя"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"devices",
+										":device_id",
+										"telemetry"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "20",
+											"description": "Количество записей"
+										}
+									],
+									"variable": [
+										{
+											"key": "device_id"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"telemetry_id\": \"a05932ac-04ea-458c-0e3c-a19641e2e035\",\n    \"device_id\": \"urn:uuid:d869d41c-2c78-2351-9198-29a0d1eead3d\",\n    \"value\": {\n      \"temperature\": 22.5\n    },\n    \"type\": \"sensor_data\",\n    \"created_at\": \"1984-03-13T05:11:41.500Z\"\n  },\n  {\n    \"telemetry_id\": \"urn:uuid:e090b61a-18f4-1b22-9b5b-40601e242ec5\",\n    \"device_id\": \"urn:uuid:d95e03bc-7b4b-1315-4859-d269b04e80b2\",\n    \"value\": {\n      \"temperature\": 22.5\n    },\n    \"type\": \"sensor_data\",\n    \"created_at\": \"1995-11-17T11:48:42.848Z\"\n  }\n]"
+						},
+						{
+							"name": "Ресурс не найден",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "User-ID",
+										"value": "123e4567-e89b-12d3-a456-426614174000",
+										"description": "(Required) Уникальный идентификатор пользователя"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"devices",
+										":device_id",
+										"telemetry"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "20",
+											"description": "Количество записей"
+										}
+									],
+									"variable": [
+										{
+											"key": "device_id"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"error\": \"NOT_FOUND\",\n  \"message\": \"Запрашиваемый ресурс не найден\"\n}"
+						},
+						{
+							"name": "Внутренняя ошибка сервера",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "User-ID",
+										"value": "123e4567-e89b-12d3-a456-426614174000",
+										"description": "(Required) Уникальный идентификатор пользователя"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/devices/:device_id/telemetry?limit=20",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"devices",
+										":device_id",
+										"telemetry"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "20",
+											"description": "Количество записей"
+										}
+									],
+									"variable": [
+										{
+											"key": "device_id"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"error\": \"INTERNAL_ERROR\",\n  \"message\": \"Произошла внутренняя ошибка сервера\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081/api/v1"
+		}
+	]
+}
