@@ -14,6 +14,7 @@
 !include DEVICONS/postgresql.puml
 !include DEVICONS/android.puml
 !include DEVICONS/redis.puml
+!include DEVICONS/python.puml
 !include DEVICONS2/react_original.puml
 !include MATERIAL/router.puml
 !include MATERIAL/message.puml
@@ -31,14 +32,14 @@ System_Boundary(b_app, "Depcreated монолит") {
 }
 
 System_Boundary(b_commands, "Управление устройствами") {
-    Container(management_api, "API управления устройствами", "Go, Gin", "Формирует команды управления, получает информацию о телеметрии, сохраняет и исполняет программиремую логику", $sprite="go")
-    Container(management_worker, "Воркер управления устройств", "Go", "Добавляет новые устройства, обновляет телеметрию, инициирует выполнения пользовательских программ", $sprite="go")
+    Container(management_api, "API управления устройствами", "Python, Flask + SQLAlchemy", "Формирует команды управления, получает информацию о телеметрии, сохраняет и исполняет программиремую логику", $sprite="python")
+    Container(management_worker, "Воркер управления устройств", "Go, GORM", "Добавляет новые устройства, обновляет телеметрию, инициирует выполнения пользовательских программ", $sprite="go")
     ContainerDb(management_database, "БД", "PostgreSQL", "Хранит устройства и программируемую логику", $sprite="postgresql")
     ContainerDb(redis_cache, "Кеш телеметрии", "Redis", "Кеширует последние данные телеметрии для быстрого доступа", $sprite="redis")
 }
 
 System_Boundary(b_configuration, "Конфигурация устройств") {
-    Container(configuration_api, "API конфигурации устройств", "Go, Gin", "Добавляет/конфигурирует устройства", $sprite="go")
+    Container(configuration_api, "API конфигурации устройств", "Python, Flask", "Добавляет/конфигурирует устройства", $sprite="python")
     ContainerDb(devices_database,"БД", "PostgreSQL", "Хранит зарегестрированные устройства и информацию о них", $sprite="postgresql")
     ContainerQueue(topic_devices, "Topic 'Devices'", "RabbitMQ")
 }
@@ -46,7 +47,7 @@ System_Boundary(b_configuration, "Конфигурация устройств") 
 System(device, "Устройство умного дома")
 
 System_Boundary(b_gateway, "Шлюз") {
-    System(iot_gateway, "Шлюз", $sprite="router")
+    Container(iot_gateway, "IoT Шлюз", "Python, Flask", "Обрабатывает подключения устройств и передачу данных", $sprite="python")
     ContainerQueue(topic_telemetry, "Topic 'Telemetry'", "RabbitMQ")
     Rel(iot_gateway, topic_telemetry, "Отправляет данные", $techn="AMQP")
 }
