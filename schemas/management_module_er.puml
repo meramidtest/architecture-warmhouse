@@ -1,0 +1,46 @@
+@startuml
+title Management Module - ER Diagram (Диаграмма сущностей)
+
+' Сущность устройства
+entity "Device\n(Устройство)" as device {
+    * device_id : VARCHAR(36) <<PK>>
+    --
+    * serial_id : VARCHAR(255)
+    * name : VARCHAR(255)
+    * type : VARCHAR(100)
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+}
+
+' Сущность программируемой логики
+entity "DeviceCustomLogic\n(Программируемая логика)" as logicConfig {
+    * logic_config_id : VARCHAR(36) <<PK>>
+    * device_id : VARCHAR(36) <<FK>>
+    --
+    * name : VARCHAR(255)
+    * value : JSON логика заданная пользователем
+    * type : VARCHAR(50)
+    * is_active : BOOLEAN
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+}
+
+' Сущность программируемой логики
+entity "Telemetry\n(Историческая телеметрия)" as telemetry {
+    * telemetry_id : VARCHAR(36) <<PK>>
+    * device_id : VARCHAR(36) <<FK>>
+    --
+    * value : JSON
+    * type : VARCHAR(50)
+    * created_at : TIMESTAMP
+}
+
+' Связи между сущностями
+device ||--o{ logicConfig : "имеет программируемую логику"
+device ||--o{ telemetry : "имеет историческую телеметрию"
+
+note right of device : Основная сущность\nустройства в системе
+
+note left of logicConfig : Программируемая пользователем логика устройства
+
+@enduml 

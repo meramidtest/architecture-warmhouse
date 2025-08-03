@@ -1,0 +1,144 @@
+openapi: 3.0.3
+info:
+  title: IoT Gateway API
+  version: 1.0.0
+  description: Minimal API specification for IoT Gateway in smart home system
+
+servers:
+  - url: http://localhost:8080
+    description: IoT Gateway server
+
+paths:
+  /devices:
+    post:
+      summary: Add new device to gateway
+      description: Register a new IoT device with the gateway
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceRegistration'
+      responses:
+        '201':
+          description: Device successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceResponse'
+        '400':
+          description: Invalid device data
+        '409':
+          description: Device already exists
+
+  /devices/{deviceId}/commands:
+    post:
+      summary: Send command to device
+      description: Send control command to a specific IoT device
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceCommand'
+      responses:
+        '200':
+          description: Command sent successfully
+        '404':
+          description: Device not found
+        '400':
+          description: Invalid command
+
+  /devices/{deviceId}/status:
+    get:
+      summary: Get device status
+      description: Retrieve current status of a specific device
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Device status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceStatus'
+        '404':
+          description: Device not found
+
+components:
+  schemas:
+    DeviceRegistration:
+      type: object
+      required:
+        - device_id
+        - name
+        - type
+      properties:
+        device_id:
+          type: string
+          format: uuid
+          description: Unique device identifier
+        name:
+          type: string
+          maxLength: 255
+          description: Device name
+        type:
+          type: string
+          maxLength: 100
+          description: Device type
+        serial_id:
+          type: string
+          description: Device serial number
+
+    DeviceResponse:
+      type: object
+      properties:
+        device_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [registered, active, inactive]
+        registered_at:
+          type: string
+          format: date-time
+
+    DeviceCommand:
+      type: object
+      required:
+        - command
+      properties:
+        command:
+          type: string
+          description: Command to execute
+        parameters:
+          type: object
+          description: Command parameters
+
+    DeviceStatus:
+      type: object
+      properties:
+        device_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [online, offline, error]
+        last_seen:
+          type: string
+          format: date-time
+        telemetry:
+          type: object
+          description: Latest telemetry data 

@@ -1,0 +1,86 @@
+@startuml
+!include utils/C4_Context.puml
+!include utils/C4_Container.puml
+!include utils/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/material
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include DEVICONS/go.puml
+!include DEVICONS/postgresql.puml
+!include DEVICONS/android.puml
+!include DEVICONS/redis.puml
+!include DEVICONS/python.puml
+!include DEVICONS2/react_original.puml
+!include MATERIAL/router.puml
+!include MATERIAL/message.puml
+!include FONTAWESOME/users.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Пользователь", "Клиент, управляющий умным домом", $sprite="users")
+
+System_Boundary(b_app, "Depcreated монолит") {
+    Container(app_api, "API монолита", "Go, Gin", "", $sprite="go")
+    ContainerDb(app_database, "БД", "PostgreSQL", "Хранит устройства и программируемую логику", $sprite="postgresql")
+
+    Container(temperature_api, "API температуры", "Python, Flask", "", $sprite="python")
+}
+
+System_Boundary(b_commands, "Управление устройствами") {
+    Container(management_api, "API управления устройствами", "Python, Flask + SQLAlchemy", "Формирует команды управления, получает информацию о телеметрии, сохраняет и исполняет программиремую логику", $sprite="python")
+    Container(management_worker, "Воркер управления устройств", "Go, GORM", "Добавляет новые устройства, обновляет телеметрию, инициирует выполнения пользовательских программ", $sprite="go")
+    ContainerDb(management_database, "БД", "PostgreSQL", "Хранит устройства и программируемую логику", $sprite="postgresql")
+    ContainerDb(redis_cache, "Кеш телеметрии", "Redis", "Кеширует последние данные телеметрии для быстрого доступа", $sprite="redis")
+}
+
+System_Boundary(b_configuration, "Конфигурация устройств") {
+    Container(configuration_api, "API конфигурации устройств", "Python, Flask", "Добавляет/конфигурирует устройства", $sprite="python")
+    ContainerDb(devices_database,"БД", "PostgreSQL", "Хранит зарегестрированные устройства и информацию о них", $sprite="postgresql")
+    ContainerQueue(topic_devices, "Topic 'Devices'", "RabbitMQ")
+}
+
+System(device, "Устройство умного дома")
+
+System_Boundary(b_gateway, "Шлюз") {
+    Container(iot_gateway, "IoT Шлюз", "Python, Flask", "Обрабатывает подключения устройств и передачу данных", $sprite="python")
+    ContainerQueue(topic_telemetry, "Topic 'Telemetry'", "RabbitMQ")
+    Rel(iot_gateway, topic_telemetry, "Отправляет данные", $techn="AMQP")
+}
+
+BiRel(device, iot_gateway, "Отправляет/читает данные", $techn="MQTT")
+
+Container(spa_application, "SPA приложение", "React, TypeScript", "React приложение, предоставляет веб-интерфейс управления умным домом", $sprite="react_original")
+
+Rel_Down(user, spa_application, "Использует приложение", $techn="HTTPS")
+
+Rel_Down(spa_application, management_api, "Использует", $techn="HTTPS/JSON")
+Rel_Down(spa_application, configuration_api, "Отправляет запрос на добавление/конфигурацию устройства/получить доступные устройства", $techn="HTTPS/JSON")
+Rel(configuration_api, iot_gateway, "Запрашивает добавление устройства", $techn="HTTPS/JSON")
+
+BiRel(management_api, management_database, "Читает/записывает данные", $techn="SQL")
+BiRel(management_worker, management_database, "Читает/записывает данные", $techn="SQL")
+BiRel(configuration_api, devices_database, "Читает/записывает данные", $techn="SQL")
+
+BiRel(management_api, redis_cache, "Читает/записывает кеш", $techn="Redis Protocol")
+Rel(management_worker, redis_cache, "Записывает кеш телеметрии", $techn="Redis Protocol")
+
+Rel_Right(configuration_api, topic_devices, "Отправляет сообщения в", $techn="AMQP")
+
+Rel_Back(management_worker, topic_devices, "Подписывается", $techn="AMQP")
+
+Rel_Down(management_api, iot_gateway, "Отправляет запросы", $techn="HTTPS/JSON")
+Rel_Down(management_worker, iot_gateway, "Отправляет запросы", $techn="HTTPS/JSON")
+
+Rel(management_worker, topic_telemetry, "Подписывается", $techn="AMQP")
+
+Rel_Right(spa_application, app_api, "Использует", $techn="HTTPS/JSON")
+BiRel(app_api, app_database, "Читает/записывает данные", $techn="SQL")
+Rel_Right(app_api, temperature_api, "Использует", $techn="HTTPS/JSON")
+
+
+@enduml

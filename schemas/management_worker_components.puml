@@ -1,0 +1,56 @@
+@startuml
+!include utils/C4_Context.puml
+!include utils/C4_Container.puml
+!include utils/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/material
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include DEVICONS/go.puml
+!include DEVICONS/postgresql.puml
+!include DEVICONS/android.puml
+!include DEVICONS/redis.puml
+!include DEVICONS2/react_original.puml
+!include MATERIAL/router.puml
+!include MATERIAL/message.puml
+!include FONTAWESOME/users.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(cb, "Воркер управления устройствами") {
+    Component(telemetryController, "TelemetryAMQPController")
+    Component(devicesController, "DevicesAMQPController")
+
+    Boundary(pl_b, "ProgrammableLogicModule") {
+        Component(programmableLogicService, "ProgrammableLogicService")
+        Component(logicRepository, "LogicTargetRepository")
+    }
+
+    Rel(telemetryController, programmableLogicService, "uses", "")
+    Rel(programmableLogicService, logicRepository, "uses", "")
+
+    Boundary(tel_b, "TelemetryModule") {
+        Component(telemetryService, "TelemetryService")
+        Component(telemetryRepository, "TelemetryRepository")
+    }
+
+    Rel(telemetryController, telemetryService, "uses", "")
+    Rel(telemetryService, telemetryRepository, "uses", "")
+
+    Component(iotGatewayClient, "IoTGatewayClient")
+
+    Rel(programmableLogicService, iotGatewayClient, "uses", "")
+
+    Boundary(devices_b, "DevicesModule") {
+        Component(devicesService, "DevicesService")
+        Component(devicesRepository, "DevicesRepository")
+    }
+
+    Rel(devicesController, devicesService, "uses", "")
+    Rel(devicesService, devicesRepository, "uses", "")
+}
+@enduml
